@@ -1,0 +1,13 @@
+replicaCount: 1
+image:
+  repository: nginx
+  tag: "latest"
+config:
+  # This is invalid YAML - missing value
+  invalidKey:
+  # This will cause template errors
+  missingRequired:
+# This line has invalid indentation
+    badIndent: value
+# Invalid YAML structure
+[invalid: structure]

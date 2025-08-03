@@ -1,0 +1,136 @@
+replicaCount: 10
+
+image:
+  repository: nginx
+  tag: "1.21"
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: app1.example.com
+      paths: ["/"]
+    - host: app2.example.com
+      paths: ["/api", "/admin"]
+    - host: app3.example.com
+      paths: ["/"]
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 5
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "super-secret-password"
+    database: "myapp"
+  primary:
+    persistence:
+      enabled: true
+      size: 100Gi
+
+config:
+  environment: "production"
+  logLevel: "info"
+  features:
+    featureA: true
+    featureB: false
+    featureC: true
+  database:
+    host: "postgresql"
+    port: 5432
+    name: "myapp"
+  cache:
+    enabled: true
+    ttl: 3600
+  monitoring:
+    enabled: true
+    interval: 30s
+  security:
+    enabled: true
+    policies:
+      - name: "network-policy"
+        enabled: true
+      - name: "pod-security-policy"
+        enabled: true
+
+# Large configuration for stress testing
+largeConfig:
+  data: |
+    # This is a large configuration block for testing
+    server:
+      port: 8080
+      host: 0.0.0.0
+      ssl:
+        enabled: true
+        cert: /etc/ssl/certs/server.crt
+        key: /etc/ssl/private/server.key
+    
+    database:
+      connections:
+        max: 100
+        min: 10
+        idle_timeout: 300
+      pools:
+        - name: primary
+          host: db-primary.example.com
+          port: 5432
+          database: app_primary
+        - name: replica
+          host: db-replica.example.com
+          port: 5432
+          database: app_replica
+    
+    cache:
+      redis:
+        cluster:
+          - host: redis-1.example.com
+            port: 6379
+          - host: redis-2.example.com
+            port: 6379
+          - host: redis-3.example.com
+            port: 6379
+    
+    services:
+      api:
+        timeout: 30s
+        retries: 3
+      auth:
+        jwt:
+          secret: very-long-jwt-secret-key-here
+          expiry: 3600
+      storage:
+        s3:
+          bucket: my-app-storage
+          region: us-west-2
+          
+  environments:
+    - name: dev
+      replicas: 1
+      resources:
+        cpu: 100m
+        memory: 128Mi
+    - name: staging
+      replicas: 3
+      resources:
+        cpu: 500m
+        memory: 512Mi
+    - name: prod
+      replicas: 10
+      resources:
+        cpu: 1000m
+        memory: 2Gi

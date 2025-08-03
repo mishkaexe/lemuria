@@ -1,0 +1,24 @@
+replicaCount: 3
+
+image:
+  tag: "1.21"
+
+service:
+  type: LoadBalancer
+
+ingress:
+  enabled: true
+  host: app.example.com
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+config:
+  message: "Hello from production"
+  environment: "production"
+  debug: false

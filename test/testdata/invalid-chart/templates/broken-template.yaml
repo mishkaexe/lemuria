@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-broken
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          # This will cause template error - referencing non-existent value
+          env:
+            - name: REQUIRED_VALUE
+              value: "{{ .Values.config.nonExistentValue }}"
+          # Invalid template syntax
+          ports:
+            - containerPort: {{ .Values.invalidSyntax.port | default "80" }}

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: complex-app
+description: A complex Helm chart for performance and stress testing
+type: application
+version: 1.0.0
+appVersion: "2.0.0"
+# dependencies:
+#   - name: postgresql
+#     version: 11.9.13
+#     repository: https://charts.bitnami.com/bitnami
+#     condition: postgresql.enabled

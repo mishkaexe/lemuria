@@ -1,0 +1,20 @@
+replicaCount: 2
+
+image:
+  tag: "dev-version"
+
+service:
+  type: NodePort
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+config:
+  message: "Hello from development"
+  environment: "development"
+  debug: true
